@@ -80,6 +80,7 @@ public class Note extends JDialog implements Serializable {
 	 */
 	public Note(String noteName) {
 		this(new NoteData(noteName, colors[0], "", null, defaultSize));
+		changed = true;
 	}
 	
 	/*
@@ -198,8 +199,9 @@ public class Note extends JDialog implements Serializable {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				for(NoteData d : noteData)
-					new Note(d).setVisible(true);
+				if(noteData != null)
+					for(NoteData d : noteData)
+						new Note(d).setVisible(true);
 			}
 			
 		});
