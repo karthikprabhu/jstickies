@@ -4,10 +4,11 @@ JStickies is a simple, cross-platform sticky notes application based on Java. It
 
 Currently, JStickies supports synchronization with only Dropbox. Support for more cloud providers will be added soon.
 
-#Download
+##Download
 
 You can download JStickies app [here](https://raw.github.com/karthikprabhu/jstickies/master/JStickies.jar).
 
+###Usage 
 To run the file, open your command line terminal and type 
 
 ```bash
@@ -20,16 +21,16 @@ OR
 javaw -jar JStickies.jar
 ```
 
-#Contribution
+##Contribution
 
 JStickies is an open-source application and any contributions are very much welcomed. 
 
-#TO-DO
+##To-do
 
 * Add support for more cloud service providers
 * Improve exception handling
 
-#License
+##License
 
 JStickies is licensed under the [MIT License](http://en.wikipedia.org/wiki/MIT_License).
 
