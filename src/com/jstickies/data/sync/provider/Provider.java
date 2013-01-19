@@ -6,7 +6,12 @@
 package com.jstickies.data.sync.provider;
 
 import java.io.File;
-import java.io.FilenameFilter;
+import java.io.IOException;
+import java.security.CodeSource;
+import java.util.ArrayList;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+
 import javax.swing.ImageIcon;
 
 import org.slf4j.Logger;
@@ -94,23 +99,32 @@ public abstract class Provider {
 	@SuppressWarnings("unchecked")
 	public static Class<Provider>[] getAvailableProviders() {
 		logger.info("Finding all available Providers");
-		Class<Provider>[] providers = null;
+		
 		String packagePath = Provider.class.getPackage().getName().replaceAll("\\.", "/"); //Get package name and convert it to a relative path
-		File packageFile = new File(ClassLoader.getSystemClassLoader().getResource(packagePath).getFile()); //Create a File object for the package
+		ArrayList<String> classFiles = new ArrayList<String>();
 		
-		String[] classFiles = packageFile.list(new FilenameFilter() {
-			@Override
-			public boolean accept(File arg0, String arg1) {
-				if(arg1.endsWith(".class") && !arg1.startsWith("Provider") && !arg1.contains("$"))
-					return true;
-				return false;
+		try {
+			CodeSource cs = Provider.class.getProtectionDomain().getCodeSource();
+			ZipInputStream zis = new ZipInputStream(cs.getLocation().openStream());
+			ZipEntry entry = null;
+			while((entry = zis.getNextEntry()) != null) {
+				String temp = entry.getName();
+				if(temp.contains(packagePath)) {
+					temp = temp.replace(packagePath + "/", "");
+					if(temp.endsWith(".class") && !temp.startsWith("Provider") && !temp.contains("$"))
+						classFiles.add(temp);
+				}
 			}
-		});
-		providers = new Class[classFiles.length];
-		logger.info("{} Provider(s) found", classFiles.length);
+		}
+		catch(IOException e) {
+			logger.error("Error reading Jar file!");
+		}
 		
-		for(int i=0; i<classFiles.length; i++) {
-			String classPath = packagePath + "/" + classFiles[i].replace(".class", ""); //Relative path of the class
+		Class<Provider>[] providers = new Class[classFiles.size()];
+		logger.info("{} Provider(s) found", classFiles.size());
+		
+		for(int i=0; i<classFiles.size(); i++) {
+			String classPath = packagePath + "/" + classFiles.get(i).replace(".class", ""); //Relative path of the class
 			String className = classPath.replaceAll("/", "\\.");
 			try {
 				providers[i] = (Class<Provider>) Class.forName(className);	
