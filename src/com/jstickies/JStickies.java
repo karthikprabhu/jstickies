@@ -18,13 +18,13 @@ import java.io.ObjectOutputStream;
 import java.util.Timer;
 
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 import com.jstickies.data.AutoSaver;
 import com.jstickies.data.sync.MetaData;
@@ -49,6 +49,7 @@ public class JStickies {
 	public static Synchronizer SYNCHRONIZER = null;
 	public static AutoSaver AUTO_SAVER = null;
 	public static MetaData METADATA = null;
+	public static JFrame JFRAME = null;
 	
 	private long autoSaveInterval = 30000; //set the auto save interval to 30s
 	private static final Logger logger = LoggerFactory.getLogger(JStickies.class);
@@ -61,6 +62,19 @@ public class JStickies {
 			NOTE_FOLDER.mkdir();
 			logger.info("Created the JStickies note directory.");
 		}
+
+		JFRAME = new JFrame("JStickies");
+		JFRAME.setIconImage(loadImage(TRAY_ICON).getImage());
+		JFRAME.setUndecorated(true);
+		JFRAME.setResizable(false);
+		JFRAME.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		/*JFRAME.addWindowListener(new WindowAdapter() {
+			public void windowIconified(WindowEvent e) {
+				((Frame)e.getWindow()).setExtendedState(e.getOldState());
+			}
+		});*/
+		JFRAME.setExtendedState(JFrame.NORMAL);
+		JFRAME.setVisible(true);
 		
 		logger.info("Launching System Tray application");
 		SwingUtilities.invokeLater(new Runnable() {

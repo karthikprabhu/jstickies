@@ -22,8 +22,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
@@ -183,9 +183,7 @@ public class TrayApplication implements ActionListener, PopupMenuListener {
 	 * Displays/Hides all notes depending on the value of b
 	 */
 	private void displayNotes(boolean b) {
-		Iterator<Note> iterator = Note.notes.iterator();
-		while(iterator.hasNext())
-			iterator.next().setVisible(b);
+		JStickies.JFRAME.setExtendedState((b)? JFrame.NORMAL : JFrame.ICONIFIED);
 	}
 
 	@Override
@@ -197,6 +195,7 @@ public class TrayApplication implements ActionListener, PopupMenuListener {
 	@Override
 	public void popupMenuWillBecomeVisible(PopupMenuEvent arg0) {
 		menuItems[4].setEnabled(JStickies.SYNCHRONIZER != null);
+		menuItems[3].setText(menuNames[(JStickies.JFRAME.getExtendedState() == JFrame.NORMAL)? 3 : 4]);
 	}
 	
 }

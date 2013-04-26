@@ -14,7 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.swing.JDialog;
+import javax.swing.JWindow;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
@@ -28,7 +28,7 @@ import com.jstickies.data.NoteData;
 import componentadapter.ComponentResizer;
 
 
-public class Note extends JDialog implements Serializable {
+public class Note extends JWindow implements Serializable {
 
 	private static final long serialVersionUID = 4536222406431913314L;
 	private static final Logger logger = LoggerFactory.getLogger(Note.class);
@@ -87,6 +87,7 @@ public class Note extends JDialog implements Serializable {
 	 * Creates a new Note from a NoteData object. 
 	 */
 	public Note(NoteData data) {
+		super(JStickies.JFRAME);
 		notes.add(this); //Add this note to the set of all notes
 		
 		noteData = data;
@@ -95,7 +96,7 @@ public class Note extends JDialog implements Serializable {
 		
 		setSize(noteData.noteSize);
 		setLayout(new BorderLayout());
-		setUndecorated(true);
+		//setUndecorated(true);
 		if(noteData.noteLocation == null) {
 			setLocationRelativeTo(null);
 			noteData.noteLocation = getLocation(); //To avoid null pointer exception in isNoteChanged
